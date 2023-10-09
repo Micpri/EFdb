@@ -4,7 +4,7 @@ A web-app to interact with a non-relational Mongo database for storing and acces
 
 <H2>Installation</H2>
 
-Xoming soon...
+Coming soon...
 
 <H2>Running</H2>
 

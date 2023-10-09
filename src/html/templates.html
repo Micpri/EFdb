@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!DOCTYPE html>
+    <html lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <base href="http://127.0.0.1:5000/">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+    <script src="/app.min.js"></script>
+        <!-- https://mottie.github.io/tablesorter/docs/#Getting-Started -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/css/theme.blue.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/css/theme.green.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/js/jquery.tablesorter.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/js/jquery.tablesorter.widgets.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/js/widgets/widget-editable.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/main.css">
+    <meta name="Templates">
+    <title>Templates</title>
+    {% include 'head.html' %}
+    {% include 'navbar.html' %}
+  </head>
+  <body>
+
+    <div id="TemplatesNav">
+      <h2>Templates</h2>
+      <p>
+        These templates have been designed with the correct format required for specific collections 
+        within the emissions database. You can download them here before filling in the information
+        and then uploading on the home tab.
+      </p>
+      <div class="form" class="box">
+        <h3>Upload a template</h3>
+        <div class="form-group">
+          <small class="form-text text-muted">
+            Use this form to upload new templates.
+          </small>
+        </div>
+        <form action = "http://localhost:5000/TemplateUploader" method = "POST" enctype = "multipart/form-data">
+          <div class="form-group">
+           <label for="TemplateUploadInput">File Upload:</label>
+            <input type="file" name="TemplateUploadInput" id="TemplateUploadInput" multiple>
+          </div>
+          <div class="form-group">
+            <input type="submit"/>
+          </div>
+        </form>   
+      </div>
+    </div>
+
+    <div class="file-list">
+      <h2>Template List</h2>
+      <ul>
+        {% for file in files %}
+          {% set extension = 'templates/' %}
+          {% set path = extension + file %}
+          <form action = "http://localhost:5000/DeleteResource" method = "POST" >
+              <li class="file-item">
+                <span class="file-link">{{ file }}</span>
+                <a href="{{ url_for('getDocument', filename=path ) }}"  title="Download template" class="download-button">Download</a>
+                <input type="hidden" name="file" value="{{ file }}">
+                <input type="hidden" name="extension" value="{{ extension }}">
+                <input type="submit" value="" title="Delete template" class="delete-button">
+              </li>
+          </form>
+        {% endfor %}
+      </ul>
+    </div>
+  </body>
+  <footer>
+    {% include 'navbar.html' %}
+  </footer>
+  </html>

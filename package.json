@@ -1,0 +1,26 @@
+{
+  "dependencies": {
+    "browser-sync": "^2.27.9",
+    "browserify": "^17.0.0",
+    "connect": "^3.7.0",
+    "connect-history-api-fallback": "^1.6.0",
+    "del": "^6.0.0",
+    "epoch": "^0.1.0",
+    "gulp-htmlmin": "^5.0.1",
+    "gulp-sass": "^5.1.0",
+    "gulp-shell": "^0.8.0",
+    "gulp-sourcemaps": "^3.0.0",
+    "gulp-uglify": "^3.0.2",
+    "handsontable": "^13.0.0",
+    "jquery": "^3.6.0",
+    "node-cron": "^3.0.0",
+    "run-sequence": "^2.2.1",
+    "tablesorter": "^2.31.3",
+    "vinyl-buffer": "^1.0.1",
+    "vinyl-source-stream": "^2.0.0"
+  },
+  "devDependencies": {
+    "gulp-mkdirp": "^0.1.1",
+    "sass": "^1.51.0"
+  }
+}

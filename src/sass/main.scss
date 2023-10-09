@@ -1,0 +1,49 @@
+@import 'definitions';
+@import 'navbar';
+@import 'directory-tree';
+@import 'form-group';
+@import 'file-list';
+//@import 'table-sorter'; // uses cloudflare instead
+@import 'table-buttons';
+
+body {
+    font-family: $myFont;
+    color: black;
+    font-size: 12pt;
+    background-color: #FAFAFA;
+}
+
+h1, h2, h3, h4, h5 {
+    color: $grey;
+    margin: 5px;
+}
+
+.horizontal {
+    display: flex;
+    align-items: center;
+}
+
+.pad {
+    padding: 10px;
+}
+
+.collectionslink {
+    background-color: $blue;
+    color:white;
+}
+
+#DBTableNav {
+    max-width: 1100px;
+    border: 2px solid $grey; 
+    padding: 10px; /* Optional: Add padding inside the box for spacing */
+    border-radius: 3px;
+
+}
+
+#table_title:not(:empty) {
+    display: inline-block; /* Ensures background covers only the text length */
+    background-color: $blue; /* Background color for selected option */
+    color: #fff; /* Text color for selected option */
+    padding: 5px 10px; /* Padding for selected option */
+    border-radius: 5px; /* Rounded corners for selected option */
+}

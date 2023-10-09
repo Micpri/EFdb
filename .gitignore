@@ -1,0 +1,6 @@
+build
+node_modules
+src/py/__pycache__/*
+_server_initiate.sh
+package-lock.json
+run.sh

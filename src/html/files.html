@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!DOCTYPE html>
+    <html lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <base href="http://127.0.0.1:5000/">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+    <script src="/app.min.js"></script>
+        <!-- https://mottie.github.io/tablesorter/docs/#Getting-Started -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/css/theme.blue.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/css/theme.green.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/js/jquery.tablesorter.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/js/jquery.tablesorter.widgets.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/js/widgets/widget-editable.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/main.css">
+    <meta name="Files">
+    <title>Files</title>
+    {% include 'head.html' %}
+    {% include 'navbar.html' %}
+ </head>
+  <body>
+    <div id="FilesNav">
+      <h2>Entry resources</h2>
+      <p>
+        Use this page to upload any files associated with an entry. These should be in the Document column. This column should exist in all templates
+      </p>
+      <div class="form">
+        <h3>Upload a file</h3>
+        <div class="form-group">
+          <small class="form-text text-muted">
+            These can be any kind of file associated with the entry.
+          </small>
+        </div>
+        <form action = "http://localhost:5000/FilesUploader" method = "POST" enctype = "multipart/form-data">
+          <div class="form-group">
+            <label for="FilesUploadInput">File Upload:</label>
+            <input type="file" name="FilesUploadInput" id="FilesUploadInput" multiple>
+          </div>
+          <div class="form-group">
+            <input type="submit"/>
+          </div>
+        </form>   
+      </div>
+    </div>
+
+    <div class="file-list">
+      <h2>Files List</h2>
+      <ul>
+        {% for file in files %}
+          {% set extension = 'files/' %}
+          {% set path = extension + file %}
+          <form action = "http://localhost:5000/DeleteResource" method = "POST">
+            <li class="file-item">
+              <span class="file-link">{{ file }}</span>
+              <a href="{{ url_for('getDocument', filename=path ) }}" class="download-button" title="Download file" >Download</a>
+              <input type="hidden" name="file" value="{{ file }}">
+              <input type="hidden" name="extension" value="{{ extension }}">
+              <input type="submit" value="" title="Delete file" class="delete-button">
+            </li>
+          </form>
+        {% endfor %}
+      </ul>
+    </div>
+  </body>
+  <footer>
+    {% include 'navbar.html' %}
+  </footer>
+  </html>

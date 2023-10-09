@@ -1,0 +1,131 @@
+{% macro render_tree(d, loop_count) -%}
+  <ul>
+    {% for k,v in d.items(): -%}
+    {% set index = loop_count[0] | int %}
+      {% if loop_count.append(loop_count.pop() + 1) %}{% endif %} 
+      {% set coll_name_path = coll_names_paths[index] -%}
+      {% if v -%}
+        <li>
+          <details>
+            <summary>
+              <span coll_name_path={{coll_name_path}} class="collection_link">{{k}}</span>
+            </summary>
+            {{ render_tree(v, loop_count) }}
+          </details>
+        </li>
+      {% else -%}
+        <li>
+          <span coll_name_path={{coll_name_path}} class="collection_link">{{k}}</span>
+        </li>
+      {% endif -%}
+    {% endfor -%}
+  </ul>
+{%- endmacro %}
+<!DOCTYPE html>
+<html>
+<head>
+    <!DOCTYPE html>
+    <html lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <base href="http://127.0.0.1:5000/">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+    <script src="/app.min.js"></script>
+        <!-- https://mottie.github.io/tablesorter/docs/#Getting-Started -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/css/theme.blue.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/css/theme.green.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/js/jquery.tablesorter.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/js/jquery.tablesorter.widgets.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/js/widgets/widget-editable.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/main.css">
+    <meta name="Home">
+    <title>EF database</title>
+    {% include 'head.html' %}
+    {% include 'navbar.html' %}
+</head>
+<body>
+  <div id="CollectionsNav">
+      <h2>Collections</h2>
+      <p>
+        The database is made up of a series of nested collections displayed in the directory below. These can be edited or deleted here. It is also possible to create new collections.
+      </p>
+      <div class="form form-group">
+        <h3>Create or Update a Collection</h3>
+          <small class="form-text text-muted">
+            Only upload template files. See the templates tab for examples and more information.
+            If the collection does not exist, a new one will be made. If it does exist, then the new file will be appended to it.
+            <br>Hint: use a . to create branches in the directory tree below, for example, Mode_of_Transport.Sea.Fartyg
+            <br>Uploads to collections should follow the specified format. Templates can be found on the template tab.
+          </small>
+          <form action = "http://localhost:5000/CollectionUploader" method = "POST" enctype = "multipart/form-data">   
+             <input type="text" id="NewCollectioninput" name="NewCollectionName" placeholder="Collection name...">
+                <label for="CollectionUploadInput">File Upload:</label>
+                <input type="file" name="CollectionUploadInput" id="CollectionUploadInput">
+              <input type="submit"/>
+          </form>   
+      </div>
+    </div>
+
+    <!-- display DB directory tree-->
+  <div class="form">
+    <h3>Find a Collection</h3>
+    <p>
+      If you know the name of the collection, use the form below to load the table. 
+      If you do not know the name of the collection, use the directory navigation below to browse.
+    </p>
+      <div class="form-group box">
+        <input type="text" id="FindCollectioninput" name="FindCollectionName" placeholder="Collection name...">
+        <input type="submit" id="DisplayCollectionButton" Value="Display"/>
+      </div>
+    <h3>Directory Search</h3>
+    <p>
+      Here you can find all collections within the database. 
+      These are organised in a tree directory like structure. 
+      Click on the highlighted nodes to expand the next branch down.
+    </p>
+    <div id="DBDirTree">
+      {{ render_tree(tree, [0]) }}
+    </div>
+    <div class="box">
+        <h4>Selected Collection:</h4>
+          <label id="table_title"></label>
+          <button class="pad delete-button" id="DeleteCollectionButton" style="float: right;"></button>
+    </div>
+  </div>
+
+  <h2>Emission Factor table</h2>
+  <p>
+    The emission factors of the selected collection are shown below. These can be edited in place and exported.
+    <br> To show a collection, use the directory tree above to navigate to a collection. Remember some may be empty 
+    so a table will not be shown
+  </p>
+  <div id="database_table_div" class="form-group">
+    <h3>Table</h3>
+    <small class="form-text text-muted">
+      To edit cell values or delete rows, enable Edit Mode by clicking the Edit Mode button. This activates the Add Row, Delete All and Save Table buttons as well as giving interactivity in the table itself.
+      <br>Once in Edit Mode, to edit an individual cell, click on the cell value and change the contents. When finished editing, press enter for the table to accept the changes.
+      <br>To save these changes to the database, click Save Table.
+      <br>If entries are added to a collection that have new fields, all previous entries in the collection will be updated to include this new field.
+    </small>
+  </div>
+
+  <div id="DBTableNav">
+    <button class="toggle" id="EditTableButton">Edit Mode</button>
+    <button class="toggle_opposite" id="AddRowButton">Add Row</button>
+    <!-- <button class="toggle_opposite" id="AddFieldButton">Add Field</button> -->
+    <button class="toggle_opposite" id="DeleteAllButton">Delete All</button>
+    <button class="toggle_opposite" id="SaveTableButton">Save Table</button>
+    <button class="" id="ExportTableButton">Export Table</button>
+    <small class="form-text text-muted">
+      Exports exactly what is present on screen, not what is saved to the database.
+    </small>
+    <br>
+  </div>  
+  <div id="table_container"></div>
+  <br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+</body>
+<footer>
+  {% include 'navbar.html' %}
+</footer>
+</html>
